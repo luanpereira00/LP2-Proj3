@@ -41,11 +41,14 @@ public class Taxi extends Vehicle
      */
     public String getStatus()
     {
-        String string = getID() + " at " + getLocation() + " headed for " +
-               getDestination();
-        if(getDestination().equals("")) 
+        String string = getID() + " at " + getLocation() + " headed for ";
+        if(getDestination()==null) 
         {
-        	string = string + " nowhere (i'm free)";
+        	string = string + "nowhere (it's free)";
+        }
+        else
+        {
+        	string = string + getDestination();
         }
         return string;
     }

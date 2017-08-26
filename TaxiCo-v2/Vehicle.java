@@ -1,3 +1,10 @@
+/**
+ * A Vehicle.
+ * Vehicle have a unique ID, some location and sometimes a destination.
+ * 
+ * @author Luan Pereira 
+ * @version 2017.08.26
+ */
 public class Vehicle{
 	 // A unique ID for this taxi.
     protected String id;
@@ -7,7 +14,11 @@ public class Vehicle{
     protected String location;
     // Whether it is free or not.
 	
-    Vehicle(String id){
+    /**
+     * Constructor for objects of Vehicle.
+     * @param id The unique id.
+     */
+    public Vehicle(String id){
     	this.id=id;
     }
     
@@ -17,7 +28,13 @@ public class Vehicle{
      */
     public String getStatus()
     {
-        return "Vehicle "+getID();
+    	String string = "Vehicle " + getID() + " at " + getLocation() + " headed for " +
+                getDestination();
+         if(getDestination().equals("")) 
+         {
+         	string = string + " someplace unknown";
+         }
+         return string;
     }
     
     /**

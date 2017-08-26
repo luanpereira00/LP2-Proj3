@@ -121,4 +121,31 @@ public class TaxiCo
         destinations.add("Sainsbury's");
         destinations.add("Darwin");
     }
+    
+    /**
+     * Get a shuttle which is heading for local or a taxi which is free
+     * @param local Some local to go
+     * @return Return a shuttle or taxi to some local or null if has not free car
+     */
+     public Vehicle getCarForLocation(String local) {
+    	Vehicle vehicle = null;
+    	 for(Vehicle car : vehicleFleet) 
+    	 {
+    		 if(car instanceof Shuttle) 
+    		 {
+    			 if(car.getDestination().equals(local))
+    			 {
+    				 return car;
+    			 }
+    		 }
+    		 else if (car instanceof Taxi)
+    		 {
+    			 if(car.getDestination()==null)
+    			 {
+    				 vehicle = car;
+    			 }
+    		 }
+    	 }
+    	 return vehicle;
+     }
 }

@@ -36,6 +36,7 @@ public class Helper
 	{
 		setUp();
 		Taxi taxi1 = (Taxi) taxiCo1.lookup("Car #1");		
+		//System.out.println(taxi1.getStatus());
 		taxi1.book("HIPER");
 		if ("HIPER".equalsIgnoreCase(taxi1.getDestination()) ) {
 			System.out.println("Funcionou");
@@ -70,7 +71,25 @@ public class Helper
 		System.out.println(shuttle1.getStatus());
 		
 	}
+	
+	/**
+	 * Test if when we call a taxi or a shuttle to some location is returning something
+	 */
+	public void callACar() {
+		Vehicle vehicle = taxiCo1.getCarForLocation("Natal");
+		if(vehicle.equals(null))
+		{
+			System.out.println("Retornou null");
+		}
+		else 
+		{
+			System.out.println(vehicle.getStatus());
+		}
+	}
 
+	/**
+	 * Main function
+	 */
 	public static void main(String[] args) {
 		Helper helper = new Helper();
 		System.out.println("Primeiro teste");
@@ -81,6 +100,9 @@ public class Helper
 		
 		System.out.println("Terceiro teste");
 		helper.testShuttle();
+		
+		System.out.println("Quarto teste");
+		helper.callACar();
 	}
 }
 
