@@ -11,10 +11,9 @@ import java.io.Serializable;
  */
 public interface FishParams extends Serializable {
 
-    public void initParams(double initWeight, double viableWeight,
-                    double weightReduce, double planctonEaten,
-                    double breedWeight, int breedAge,
-                    int maxAge, int huntDistance, double maxEat);
+    public void initParams(double initWeight, double viableWeight, double weightReduce, double planctonEaten,
+                double breedWeight, int breedAge, int maxAge, int huntDistance, double maxEat);
+    
     public double getInitWeight();
     public double getViableWeight();
     public double getWeightReduce();

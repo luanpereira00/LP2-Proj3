@@ -3,15 +3,19 @@ package fishsimulator;
 import java.util.List;
 
 /**
- * Blue groper fish class
+ * Um atum azul
  * @author jdb
  */
 public class Atum extends Predator {
 
     /**
-     * Create a new blue groper
-     * @param cell location of the fish
-     * @param params initial parameters
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	/**
+     * Cria um novo atum
+     * @param params Os parametros do atum
      */
     public Atum(FishParams params)
     {
@@ -19,10 +23,9 @@ public class Atum extends Predator {
         status = 2;
     }
 
-    /**
-     * Create another groper
-     * @param cell location for the new fish
-     * @return the fish spawned
+   
+    /* (non-Javadoc)
+     * @see fishsimulator.Fish#spawn(fishsimulator.Cell)
      */
     public Fish spawn(Cell cell)
     {
@@ -30,6 +33,9 @@ public class Atum extends Predator {
         return cell.getFish();
     }
     
+    /* (non-Javadoc)
+     * @see fishsimulator.Fish#eat(fishsimulator.Cell, java.util.List)
+     */
     @Override
 	protected void eat(Cell currentCell, List<Cell> neighbours) {
 		double eaten = 0.0;

@@ -6,7 +6,11 @@ package fishsimulator;
  * @version 28/11/08
  */
 public class SFPs implements FishParams {
-    private double initWeight;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private double initWeight;
     private double viableWeight;
     private double weightReduce;
     private double planctonEaten;
@@ -16,10 +20,8 @@ public class SFPs implements FishParams {
     private int huntDistance;
     private double maxEat;
     
-    public void initParams(double initWeight, double viableWeight,
-                    double weightReduce, double planctonEaten,
-                    double breedWeight, int breedAge,
-                    int maxAge, int huntDistance, double maxEat) {
+    public void initParams(double initWeight, double viableWeight, double weightReduce, double planctonEaten,
+                    double breedWeight, int breedAge, int maxAge, int huntDistance, double maxEat) {
         this.initWeight = initWeight;
         this.viableWeight = viableWeight;
         this.weightReduce = weightReduce;

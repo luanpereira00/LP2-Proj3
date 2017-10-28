@@ -3,29 +3,33 @@ package fishsimulator;
 import java.io.Serializable;
 import java.util.List;
 
+
 /**
- * This is the superclass for all kinds of fish
- * 
- * @author jdb 
- * @version 28/11/2008
+ * A superclasse de qualquer tipo de peixe
+ * @author luanpereira00
+ *
  */
 public abstract class Fish implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	protected double weight;
 	protected double viableWeight;
 	protected double weightReduce;
     protected double breedWeight;
     protected int breedAge;
     protected int maxAge;
-    protected int status; // how high up the food chain
+    protected int status;
 	protected int age = 0;
 	protected int step = -1;
 	protected final FishParams initialParams;
 	
+  
     /**
-     * Create a new fish
-     * @param cell fish location
-     * @param params parameters for the new fish
+     * Construtor de um peixe
+     * @param params Os parametros do peixe
      */
     public Fish(FishParams params)
     {
@@ -40,20 +44,23 @@ public abstract class Fish implements Serializable
 	}
         
     /**
-     * Create a new fish of the same kind
-     * @param cell - location of spawned fish
-     * @return the fish spawned
+     * Cria um peixe do mesmo tipo numa célula passada
+     * @param cell A célula do novo peixe
+     * @return O peixe criado
      */
     abstract Fish spawn(Cell cell);
     
+    /**
+     * @return Retorna booleano para o peixe estar vivo ou não
+     */
     public boolean isAlive() {
     	return !(weight < viableWeight || age > maxAge);
     	
     }    
         
 	/**
-	 * Consume a given weight of food
-	 * @param w weight of food consumed
+	 * Alimenta-se aumentando seu peso de acordo com uma quantidade de alimento passada
+	 * @param w A quantidade de alimento
 	 */
 	public void eat(double w)
 	{
@@ -61,49 +68,51 @@ public abstract class Fish implements Serializable
 	}
 	
     /**
-     * Accessor
-     * @return status of this fish
+     * @return Retorna o estado do peixe
      */
     public int getStatus() {
         return status;
     }
         
-    /**
-     * Accessor
-     * @return weight of this fish
-     */
+	/**
+	 * @return Retorna o peso do peixe
+	 */
 	public double getWeight()
 	{
 		return weight;
 	}
 	
-    /**
-     * Mutator
-     * @param weight new wightn of this fish
-     */
+	/**
+	 * Atualiza o peso do peixe
+	 * @param weight O novo peso
+	 */
 	public void setWeight(double weight)
 	{
 		this.weight = weight;
 	}
 	
 	/**
-	 * Move the fish to a new cell
-	 * @param cell destination
+	 * Movimenta o peixe e atualiza as células envolvidas
+	 * @param currentCell A célula que o peixe está atualmente
+	 * @param nextCell A célula que ele irá
 	 */
 	public void move(Cell currentCell, Cell nextCell)
 	{
 		nextCell.setFish(this);
-		//System.out.println("Movendo");
 		currentCell.setFish(null);
 	}
 	
+	/**
+	 * Ação para alimentação do peixe
+	 * @param currentCell A célula atual
+	 * @param neighbours A lista de vizinhos
+	 */
 	protected abstract void eat(Cell currentCell, List<Cell> neighbours);
 	
+	/**
+	 * Ação para a reprodução dos peixes
+	 * @param currentCell A célula atual
+	 * @param asList A lista de vizinhos
+	 */
 	protected abstract void breed(Cell currentCell, List<Cell> asList);
-	
-    /**
-     * Called for each fish once per simulator step
-     * @param step incrementing step number
-     */
-	//public abstract void act(int step, Cell currentCell);
 }

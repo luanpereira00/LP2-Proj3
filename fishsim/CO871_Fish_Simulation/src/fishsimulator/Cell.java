@@ -1,23 +1,29 @@
 package fishsimulator;
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.List;
 
+
 /**
- * Represent a single location in the ocean
- * @author jdb
- * @version 28/11/2008
+ * Uma pequena célula do oceano
+ * @author luanpereira00
+ *
  */
 public class Cell implements Comparable<Cell>, Serializable
 {
-    private int row, col;
-    //private Ocean ocean;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private int row, col;
     private Fish fish;
     private double plancton;
 
+
     /**
-     * Constructor for objects of class Cell
-     * @param initialPlancton 
+     * Construtor da célula
+     * @param row A linha que encontra-se no oceano
+     * @param col A coluna que encontra-se no oceano
+     * @param initialPlancton A sua quantidade inicial de planctons
      */
     public Cell(int row, int col, double initialPlancton)
     {
@@ -28,22 +34,19 @@ public class Cell implements Comparable<Cell>, Serializable
         this.col = col;
     }
     
-    /**
-     * Compare the status of the fish in a pair of cells
-     * Used when sorting neighbouring cells to decide which fish
-     * to eac first
-     * @param cell
-     * @return
+    
+    /* (non-Javadoc)
+     * @see java.lang.Comparable#compareTo(java.lang.Object)
      */
     public int compareTo(Cell cell) {
         return cell.getStatus() - getStatus();
     }
     
+    
     /**
-     * Add a new fish to this cell. Any existing fish at this cell will
-     * be destroyed
-     * @param fishType
-     * @return the new fish
+     * Cria um peixe nesta célula
+     * @param fishType O tipo do peixe que deve ser criado
+     * @param fishParams Os parâmetros do peixe
      */
     public void createFish(String fishType, FishParams fishParams)
     {
@@ -64,17 +67,16 @@ public class Cell implements Comparable<Cell>, Serializable
     }
 
     /**
-     * Accessor
-     * @return row of this cell
+     * @return A linha do oceano que encontra-se
      */
     public int getRow()
     {
         return row;
     }
     
+    
     /**
-     * Accessor
-     * @return column of this cell
+     * @return A coluna do oceano que encontra-se
      */
     public int getCol()
     {
@@ -82,20 +84,8 @@ public class Cell implements Comparable<Cell>, Serializable
     }
     
     /**
-     * Return all cells within an x and y distance r of here
-     * @param rectangular distance
-     * @return array of neighbouring cells
-     */
-   /* public Cell[] neighbours(int r)
-    {
-    	return neighbours(r, false);
-    }*/
-    
-    
-    
-    /**
-     * Get the status of any fish in the cell
-     * @return fish status or 0 if the cell is unoccupied
+     * Captura o estado do peixe desta célula
+     * @return Retorna o estado do peixe
      */
     public int getStatus()
     {
@@ -106,8 +96,8 @@ public class Cell implements Comparable<Cell>, Serializable
     }
     
     /**
-     * Get the fish at this cell
-     * @return fish reference or null if the cell is unoccupied
+     * Retorna o peixe da célula
+     * @return O peixe
      */
     public Fish getFish()
     {
@@ -115,8 +105,8 @@ public class Cell implements Comparable<Cell>, Serializable
     }
     
     /**
-     * Add a new fish to the cell. Any existing occupant is discarded
-     * @param fish the fish to add. Use null to empty the cell
+     * Atualiza o peixe nesta célula
+     * @param fish O novo peixe
      */
     public void setFish(Fish fish)
     {
@@ -124,8 +114,8 @@ public class Cell implements Comparable<Cell>, Serializable
     }
     
     /**
-     * Get the plancton level at this location
-     * @return plancton level
+     * Captura a quantidade de planctons associada a esta célula
+     * @return Os planctons
      */
     public double getPlancton()
     {
@@ -133,8 +123,8 @@ public class Cell implements Comparable<Cell>, Serializable
     }
     
     /**
-     * Set the plancton level at this locatopn
-     * @param p the new plancton level
+     * Atualiza a quantidade de planctons
+     * @param p A nova quantidade
      */
     public void setPlancton(double p)
     {
@@ -142,9 +132,9 @@ public class Cell implements Comparable<Cell>, Serializable
     }
     
     /**
-     * Return a random cell from the array of cells
-     * @param cells
-     * @return chosen cell
+     * Retorna uma célula randômica da lista de células
+     * @param cells A lista de células
+     * @return A célula escolhida
      */
     static Cell random(List<Cell> cells) {
         if (cells.size() == 0)
@@ -152,6 +142,12 @@ public class Cell implements Comparable<Cell>, Serializable
         return cells.get((int)(cells.size() * Math.random()));
     }
 
+	/**
+	 * Calcula a influência dos planctons de acordo com as células ao redor
+	 * @param asList A lista de células vizinhas
+	 * @param incPlancton Um parâmetro de atualização
+	 * @param maxPlancton A quantidade máxima de planctons
+	 */
 	public void plancInfluence(List<Cell> asList, double incPlancton, double maxPlancton) {
 		double value = 0;
 		for(Cell c : asList) {

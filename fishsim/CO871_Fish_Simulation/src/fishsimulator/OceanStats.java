@@ -12,18 +12,16 @@ import java.util.HashMap;
  */
 public class OceanStats
 {
-    // Counters for each type of entity (fox, rabbit, etc.) in the simulation.
-    private HashMap<Class,Counter> counters;
-    // Whether the counters are currently up to date.
+    @SuppressWarnings("rawtypes")
+	private HashMap<Class,Counter> counters;
     private boolean countsValid;
 
     /**
      * Construct a ocean-statistics object.
      */
-    public OceanStats()
+    @SuppressWarnings("rawtypes")
+	public OceanStats()
     {
-        // Set up a collection for counters for each type of animal that
-        // we might find
         counters = new HashMap<Class,Counter>();
         countsValid = true;
     }
@@ -37,16 +35,8 @@ public class OceanStats
         if(!countsValid) {
             generateCounts(ocean);
         }
-        /*Iterator keys = counters.keySet().iterator();
-        while(keys.hasNext()) {
-            Counter info = (Counter) counters.get(keys.next());
-            buffer.append(info.getName());
-            buffer.append(": ");
-            buffer.append(info.getCount());
-            buffer.append(' ');
-        }
-        */
-        for(Class key : counters.keySet()) {
+
+        for(@SuppressWarnings("rawtypes") Class key : counters.keySet()) {
             Counter info = counters.get(key);
             buffer.append(info.getName());
             buffer.append(": ");
@@ -63,7 +53,7 @@ public class OceanStats
     public void reset()
     {
         countsValid = false;
-        for(Class key : counters.keySet()) {
+        for(@SuppressWarnings("rawtypes") Class key : counters.keySet()) {
             Counter cnt = counters.get(key);
             cnt.reset();
         }
@@ -84,11 +74,10 @@ public class OceanStats
     /**
      * Increment the count for one class of animal.
      */
-    public void incrementCount(Class animalClass)
+    public void incrementCount(@SuppressWarnings("rawtypes") Class animalClass)
     {
         Counter cnt = counters.get(animalClass);
         if(cnt == null) {
-            // we do not have a counter for this species yet - create one
             cnt = new Counter(tail(animalClass.getName()));
             counters.put(animalClass, cnt);
         }
@@ -110,12 +99,11 @@ public class OceanStats
      */
     public boolean isViable(Ocean ocean)
     {
-        // How many counts are non-zero.
         int nonZero = 0;
         if(!countsValid) {
             generateCounts(ocean);
         }
-        for(Class key : counters.keySet()) {
+        for(@SuppressWarnings("rawtypes") Class key : counters.keySet()) {
             Counter info = counters.get(key);
             if(info.getCount() > 0) {
                 nonZero++;

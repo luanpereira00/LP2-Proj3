@@ -4,11 +4,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
- * Manage the rectangle of cells representing an ocean
+ * Representa um oceano
+ * @author luanpereira00
+ *
  */
 public class Ocean implements Serializable
 {
-    // Configurable parameters
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	// Configurable parameters
     private double initialPlancton = 6.0;
     private double maxPlancton = 10.0;
     private double incPlancton = 0.25;
@@ -18,12 +24,12 @@ public class Ocean implements Serializable
     private ArrayList<Cell> cells;
     
     /**
-     * Create a new ocean
-     * @param height height in cells
-     * @param width width in cells
-     * @param sardinhaParams provides parameters for any herrings created
-     * @param atumParams provides parameters for any gropers created
-     * @param tubaraoParams provides parameters for any sharks created
+     * Construtor para o oceano
+     * @param height A quantidade de linhas do oceano
+     * @param width A quantidade de colunas do oceano
+     * @param sardinhaParams Os parâmetros para criar uma sardinha
+     * @param atumParams Os parâmetros para criar um atum
+     * @param tubaraoParams Os parâmetros para criar um tubarão
      */
     public Ocean(int height, int width, FishParams sardinhaParams, FishParams atumParams, FishParams tubaraoParams) {
         this.width = width;
@@ -32,25 +38,20 @@ public class Ocean implements Serializable
         this.atumParams = atumParams;
         this.tubaraoParams = tubaraoParams;
         cells = new ArrayList<Cell>(width * height);
-        //System.out.println(cells.size());
-        //fishes = new ArrayList<Fish>(width * height);
-        //plancton = new double[width * height];
         
         for(int i=0; i<(width * height); i++) {
         	cells.add(i, new Cell(i/width, i%width, initialPlancton));
      
-        }
-        
-       
+        } 
     }
     
+
     /**
-     * Return an array of cells in a rectangle surrounding this cell. Cells
-     * are included if there row and collumn distance from here are both
-     * less than or equal to r
-     * @param r the maximum distance from here of cells returned.
-     * @param empty if true only empty cessl are returned
-     * @return array of neighbouring cells
+     * Encontra e retorna os vizinhos num determinado raio
+     * @param cell A célula que terá seus vizinhos encontrados
+     * @param r O raio da vizinhança
+     * @param empty Flag para verificar vizinhos vazios ou não
+     * @return Retorna a vizinhança
      */
     public Cell[] neighbours(Cell cell, int r, boolean empty)
     {
@@ -60,19 +61,15 @@ public class Ocean implements Serializable
     	int right = Math.min(width, col + r + 1);
     	int top = Math.max(0, row - r);
     	int bottom = Math.min(height, row + r + 1);
-    	Cell cellsArr[] = new Cell[(bottom - top)*(right - left) - 1];
-    	//System.out.println(cells.length);   	
+    	Cell cellsArr[] = new Cell[(bottom - top)*(right - left) - 1]; 	
     	int n = 0;
 
     	for (int y = top; y < bottom; y++)
     		for (int x = left; x < right; x++) {
     			if (empty && getFishAt(y, x) != null) continue;
     			if (x != col || y != row) {
-    				//el++;
-    				cellsArr[n++] = getCellAt(y,x);//new Cell(y, x);
+    				cellsArr[n++] = getCellAt(y,x);
     			}
-    			//if(el==cells.length) break;
-    			
     		}
         if (n < cellsArr.length)
             return Arrays.copyOf(cellsArr, n);
@@ -80,25 +77,11 @@ public class Ocean implements Serializable
             return cellsArr;
     }
     
-    
     /**
-     * Fish creation factory
-     * Create a new fish of the named type
-     * @param cell
-     * @param fishType string with the name of the kind of fish
-     * @return created fish
+     * Invoca os atores dentro das células do oceano
+     * @param cell A célula que terá os atores
+     * @param step O passo atual da atuação
      */
-   /* public Fish createFish(Cell cell, String fishType)
-    {
-        if (fishType.equals("sardinha"))
-            return new Sardinha(cell, sardinhaParams);
-        if (fishType.equals("atum"))
-            return new Atum(cell, atumParams);
-        if (fishType.equals("tubarao"))
-            return new Tubarao(cell, tubaraoParams);
-        return null;
-    }*/
-    
     public void act(Cell cell, int step) {
     	Fish fish = cell.getFish();
     	if (fish.step == step) return;
@@ -129,15 +112,12 @@ public class Ocean implements Serializable
 			fish.breed(cell, Arrays.asList(neighbours(cell, 5, false)));
         }
     }
-    
+
     /**
-     * Put the ocean through one iteraction of the simulator
-     * @param step number of this iteration
+     * Gerencia a atuação do oceano
+     * @param step O passo atual da atuação
      */
     public void act(int step) {
-        /*
-         * Seed the ocean with new fish occasionally
-         */
     	if (step % 50 == 0) {
     		getCellAt(10,10).setFish(null);
     		getCellAt(10,10).createFish("sardinha", sardinhaParams);
@@ -161,57 +141,37 @@ public class Ocean implements Serializable
     		}else {
     			cl.plancInfluence(Arrays.asList(neighbours(cl, 1, false)), incPlancton, maxPlancton);
     		}
-    		// Grow the plancton
-        	
     	}
-    	
-    	/*
-        Cell cells[] = Cells();
-    	for (int n = 0; n < cells.length; n++)
-    		if (cells[n].getFish() != null)
-    			cells[n].getFish().act(step);
-        // Grow the plancton
-    	for (int n = 0; n < plancton.length; n++)
-    		plancton[n] = Math.min(plancton[n] * incPlancton, maxPlancton);
-    	 */
-    	
     }
     
     /**
-     * Get all the cells in the ocean
-     * @return array of cells
-     */
-    //public ArrayList<Cell> Cells()
-   // {
-        /*Cell cells[] = new Cell[width * height];
-        for (int n = 0; n < cells.length; n++)
-            cells[n] = new Cell(n / width, n % width);
-        return cells;*/
-    	
-    //	return cells;
-   // }
-    
-    /**
-     * Return the fish at the given location, if any.
-     * @param row The desired row.
-     * @param col The desired column.
-     * @return The fish at the given location, or null if there is none.
+     * Retorna o peixe que está em determinada posição do oceano
+     * @param row A linha que o peixe encontra-se
+     * @param col A coluna que o peixe encontra-se
+     * @return O peixe que está naquela posição
      */
     public Fish getFishAt(int row, int col)
     {
         return getCellAt(row, col).getFish();
     }
     
+    /**
+     * Retorna a célula que está em determinada posição do oceano
+     * @param row A linha que a célula encontra-se
+     * @param col A coluna que a célula encontra-se
+     * @return A célula que está naquela posição
+     */
     public Cell getCellAt(int row, int col)
     {
         return cells.get(width * row + col);
     }
     
-    /**
-     * Low-level method to add the fish to the ocean. Used by cells
-     * @param fish added
-     * @param row cell location
-     * @param col cell location
+
+    /** 
+     * Atualiza a célula numa determinada posição
+     * @param cell A nova célula
+     * @param row A linha dela no oceano
+     * @param col A coluna dela no oceano
      */
     public void setCellAt(Cell cell, int row, int col)
     {
@@ -219,10 +179,10 @@ public class Ocean implements Serializable
     }
     
     /**
-     * Low-level method to add the fish to the ocean. Used by cells
-     * @param fish added
-     * @param row cell location
-     * @param col cell location
+     * Atualiza o peixe numa determinada posição do oceano
+     * @param fish O novo peixe
+     * @param row A linha do oceano que o peixe encontra-se
+     * @param col A coluna do oceano que o peixe encontra-se
      */
     public void setFishAt(Fish fish, int row, int col)
     {
@@ -230,10 +190,10 @@ public class Ocean implements Serializable
     }
     
     /**
-     * Get the plancton level
-     * @param row location
-     * @param col location
-     * @return level
+     * Retorna a quantidade de planctons numa determinada posição
+     * @param row A linha do oceano que os planctons estão
+     * @param col A coluna do oceano que os planctons estão
+     * @return A quantidade de planctons
      */
     public double getPlanctonAt(int row, int col)
     {
@@ -241,26 +201,28 @@ public class Ocean implements Serializable
     }
     
     /**
-     * Mutator
-     * @param p new plancton level
-     * @param row location
-     * @param col location
+     * Atualiza a quantidade de planctons numa determinada posição
+     * @param p A nova quantidade de planctons
+     * @param row A linha do oceano que os planctons estão
+     * @param col A coluna do oceano que os planctons estão
      */
     public void setPlanctonAt(double p, int row, int col)
     {
     	getCellAt(row, col).setPlancton(p);
     }
     
+
     /**
-     * @return The height of the ocean.
+     * @return Retorna a altura do oceano
      */
     public int getHeight()
     {
         return height;
     }
     
+ 
     /**
-     * @return The width of the ocean.
+     * @return Retorna a largura do oceano
      */
     public int getWidth()
     {

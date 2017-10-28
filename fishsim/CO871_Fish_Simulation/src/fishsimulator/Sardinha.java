@@ -1,20 +1,22 @@
 package fishsimulator;
-
-import java.util.Arrays;
 import java.util.List;
 
 /**
- * The Sardinha fish class
- * @author jdb
- * @version 28/11/2008
+ * Representa uma pequena sardinha no oceano
+ * @author luanpereira00
+ *
  */
 public class Sardinha extends Fish {
+	/**
+	 * I've no idea
+	 */
+	private static final long serialVersionUID = 1L;
 	private double planctonEaten;
 	
+
     /**
-     * Construct a new herring
-     * @param cell fish location
-     * @param params parameters for the new fish
+     * Construtor de uma sardinha
+     * @param params Os parametros da sardinha
      */
     public  Sardinha(FishParams params) {
         super(params);
@@ -22,10 +24,9 @@ public class Sardinha extends Fish {
         status = 1;
     }
     
-    /**
-     * Return a new fish of the same kind
-     * @param cell fish location
-     * @return new fish
+
+    /* (non-Javadoc)
+     * @see fishsimulator.Fish#spawn(fishsimulator.Cell)
      */
     public Fish spawn(Cell cell) {
         cell.createFish("sardinha", initialParams);
@@ -42,26 +43,21 @@ public class Sardinha extends Fish {
     		eat(p);
     		p = 0; 
     	}
-    	
     	currentCell.setPlancton(p);
-    	
-    	// burn some weight and see if we are still viable
 		weight *= weightReduce;
 	}
     
+
     /**
-     * @param cell
-     * @param cells
-     * @return
+     * Escolhe qual a melhor localização para mover-se
+     * @param cell A célula atual
+     * @param cells A lista de células vizinhas
+     * @return A melhor célula para mover-se
      */
     private Cell moviment(Cell cell, List<Cell> cells) {
-		// TODO Auto-generated method stub
     	Cell bestNeighbour = null;
-    	//Cell cells[] = cell.neighbours(1, true);
         for (Cell c: cells) {
-        	//if (c.getFish() != null) continue;
 			if (bestNeighbour == null && c.getFish()==null) {
-				// || c.getPlancton() > bestNeighbour.getPlancton()) bestNeighbour = c;
 				bestNeighbour = c;
 			}else if(bestNeighbour != null && c.getFish() == null && (bestNeighbour.getPlancton()<c.getPlancton())) {
 				bestNeighbour = c;
@@ -75,33 +71,15 @@ public class Sardinha extends Fish {
      */
     @Override
     protected void breed(Cell currentCell, List<Cell> neighbours) {
-		// TODO Auto-generated method stub
-    	
-    	// look for the neighboring cell with the most plancton
-	    // and no other fish
 		Cell bestNeighbour = null;
 		bestNeighbour = moviment(currentCell, neighbours);
 		if (bestNeighbour == null) return;
-		//System.out.println("Breeding");
     	if (weight >= breedWeight && age > breedAge) {
 			Fish child = spawn(bestNeighbour);
-			//System.out.println("Child");
             child.setWeight(weight * 0.4);
 			weight *= 0.6;
 		} else {
-			
 			if (bestNeighbour.getPlancton() > currentCell.getPlancton()) move(currentCell, bestNeighbour);
 		}
 	}
-        
-    /**
-     * Iterate this fish through one simulator cycle
-     * @param step counter that should be incremented for each
-     * call. Used to avoid the same fish acting more than once
-     * in a cycle
-     */
-
-	public void act(int step, Cell currentCell) {
-		
-	}	
 }

@@ -20,32 +20,22 @@ import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JToggleButton;
 import javax.swing.SwingConstants;
-import javax.swing.event.AncestorListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.event.AncestorEvent;
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+
 
 /**
- * A graphical view of the simulation grid.
- * The view displays a colored rectangle for each location 
- * representing its contents. It uses a default background color.
- * Colors for each type of species can be defined using the
- * setColor method.
- * 
- * @author David J. Barnes and Michael Kolling
- * @version 2003.12.22
+ * Classe que define a vizualização padrão do oceano simulado e seus atores
+ * @author luanpereira00
+ *
  */
 public class SimulatorView extends JFrame
 {
-    // Colors used for empty locations.
-    private static final Color EMPTY_COLOR = Color.white;
-    private static final Color Plancton_Full_COLOR = new Color(85, 150, 220);
-
-    // Color used for objects that have no defined color.
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private static final Color Plancton_Full_COLOR = new Color(85, 150, 220);
     private static final Color UNKNOWN_COLOR = Color.gray;
 
     private final String STEP_PREFIX = "Step: ";
@@ -54,7 +44,8 @@ public class SimulatorView extends JFrame
     private OceanView oceanView;
     
     // A map for storing colors for participants in the simulation
-    private HashMap<Class,Color> colors;
+    @SuppressWarnings("rawtypes")
+	private HashMap<Class,Color> colors;
     // A statistics object computing and storing simulation information
     private OceanStats stats;
     
@@ -77,109 +68,164 @@ public class SimulatorView extends JFrame
     private double tubaraoInfos[];
     
     private int velocidade;
-    private final Action action = new SwingAction();
     
+    /**
+     * Finaliza a atuação do oceano
+     */
     public void finalizeAtuacao(){
     	population.setText("Simulação finalizada!");
     	
     	setVisible(false);
     }
     
+    /**
+     * @return Os parametros da sardinha
+     */
     public double[] getSardinhaInfos() {
     	return sardinhaInfos;
     }
     
+    /**
+     * @return Os parametros do atum
+     */
     public double[] getAtumInfos() {
     	return atumInfos;
     }
     
+    /**
+     * @return Os parametros do tubarão
+     */
     public double[] getTubaraoInfos() {
     	return tubaraoInfos;
     }
     
+    /**
+     * @return A velocidade da simulação
+     */
     public int getVelocity() {
     	return velocidade;
     }
     
+    /**
+     * @return Uma flag para pausar/resumir
+     */
     public boolean getWait() {
     	return wait;
     }
     
+    /**
+     * @return Uma flag para reiniciar simulação
+     */
     public boolean reiniciarFlag() {
-		// TODO Auto-generated method stub
 		return reiniciar;
 	}
     
+    /**
+     * Um reset para a flag de reiniciar
+     */
     public void resetReiniciarFlag() {
-		// TODO Auto-generated method stub
 		reiniciar = false;
 	}
     
+    /**
+     * Uma definição para a flag de iniciar
+     */
     public void setUpIniciarFlag() {
-		// TODO Auto-generated method stub
 		iniciar = true;
 	}
     
+    /**
+     * @return A flag de iniciar
+     */
     public boolean iniciarFlag() {
     	return iniciar;
     }
     
+    /**
+     * Uma definição para a flag de iniciar
+     */
     public void setDownIniciarFlag() {
 		iniciar = false;
 	}
     
+    /**
+     * @return Uma flag para serializar um objeto
+     */
     public boolean serializeFlag() {
     	return serialize;
     }
     
+    /**
+     * Um reset para a flag de serializar
+     */
     public void setDownSerializeFlag() {
 		serialize = false;
 	}
     
+    /**
+     * @return Uma flag para recuperar um objeto serializado
+     */
     public boolean recoveryFlag() {
     	return recovery;
     }
     
+    /**
+     * Um reset para a flag de serializar
+     */
     public void setDownRecoveryFlag() {
 		recovery = false;
 	}
     
+    /**
+     * @return Uma flag para atualizar sardinhas
+     */
     public boolean sardinhaAttFlag() {
-		// TODO Auto-generated method stub
 		return sardinhaFlag;
 	}
     
+    /**
+     * Um reset para a flag de atualizar sardinhas
+     */
     public void resetSardinhaFlag() {
-		// TODO Auto-generated method stub
 		sardinhaFlag = false;
 	}
     
+    /**
+     * @return Uma flag de atualizar atuns
+     */
     public boolean atumAttFlag() {
-		// TODO Auto-generated method stub
 		return atumFlag;
 	}
     
+    /**
+     * Um reset para a flag de atualizar atuns
+     */
     public void resetAtumFlag() {
-		// TODO Auto-generated method stub
 		atumFlag = false;
 	}
     
+    /**
+     * @return Uma flag para atualizar tubarões
+     */
     public boolean tubaraoAttFlag() {
-		// TODO Auto-generated method stub
 		return tubaraoFlag;
 	}
     
+    /**
+     * Um reset para a flag de atualizar tubarões
+     */
     public void resetTubaraoFlag() {
-		// TODO Auto-generated method stub
 		tubaraoFlag = false;
 	}
 
+
     /**
-     * Create a view of the given width and height.
-     * @param height The simulation height.
-     * @param width The simulation width.
+     * Cria um vizualizador de acordo com a largura e altura do oceano
+     * @param height A altura do oceano
+     * @param width A largura do oceano
      */
-    public SimulatorView(int height, int width)
+    @SuppressWarnings("rawtypes")
+	public SimulatorView(int height, int width)
     {
         stats = new OceanStats();
         colors = new HashMap<Class,Color>();
@@ -229,6 +275,10 @@ public class SimulatorView extends JFrame
         pack();
     }
     
+    /**
+     * Constrói a aba de Menu
+     * @param contents Os conteiners
+     */
     private void constructMenu(Container contents) {
     	JMenuBar menuBar = new JMenuBar();
         setJMenuBar(menuBar);
@@ -248,6 +298,9 @@ public class SimulatorView extends JFrame
         JButton botaoReiniciar = new JButton("Reiniciar");
         botaoReiniciar.setToolTipText("Reinicia uma simula\u00E7\u00E3o do zero");
         botaoReiniciar.addActionListener(new ActionListener() {
+        	/* (non-Javadoc)
+        	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+        	 */
         	public void actionPerformed(ActionEvent e) {
         		reiniciar = true;
         	}
@@ -261,11 +314,17 @@ public class SimulatorView extends JFrame
         resumirPausarToggleButton.setEnabled(false);
         resumirPausarToggleButton.setToolTipText("Pausa ou resume a simulação atual");
         resumirPausarToggleButton.addActionListener(new ActionListener() {
+        	/* (non-Javadoc)
+        	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+        	 */
         	public void actionPerformed(ActionEvent arg0) {
         		wait = !wait;
         		
         		if(resumirPausarToggleButton.isSelected()) { 
 	        		Thread t = new Thread(new Runnable() {
+	        	        /* (non-Javadoc)
+	        	         * @see java.lang.Runnable#run()
+	        	         */
 	        	        @Override
 	        	        public void run() {
 	        	        	resumirPausarToggleButton.setText("Resumir");
@@ -275,6 +334,9 @@ public class SimulatorView extends JFrame
         		} 
         		else {
 	        		Thread t = new Thread(new Runnable() {
+	        	        /* (non-Javadoc)
+	        	         * @see java.lang.Runnable#run()
+	        	         */
 	        	        @Override
 	        	        public void run() {
 	        	        	resumirPausarToggleButton.setText("Pausar");
@@ -289,6 +351,9 @@ public class SimulatorView extends JFrame
         JButton buttonSerialize = new JButton("Salvar");
         buttonSerialize.setEnabled(false);
         buttonSerialize.addActionListener(new ActionListener() {
+        	/* (non-Javadoc)
+        	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+        	 */
         	public void actionPerformed(ActionEvent arg0) {
         		serialize = !serialize;
         	}
@@ -299,9 +364,15 @@ public class SimulatorView extends JFrame
         
         
         buttonIniciar.addActionListener(new ActionListener() {
+        	/* (non-Javadoc)
+        	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+        	 */
         	public void actionPerformed(ActionEvent e) {
         		setUpIniciarFlag();
         		Thread t = new Thread(new Runnable() {
+        	        /* (non-Javadoc)
+        	         * @see java.lang.Runnable#run()
+        	         */
         	        @Override
         	        public void run() {
         	        	buttonIniciar.setEnabled(false);
@@ -317,6 +388,9 @@ public class SimulatorView extends JFrame
         
         JButton buttonRecovery = new JButton("Recuperar");
         buttonRecovery.addActionListener(new ActionListener() {
+        	/* (non-Javadoc)
+        	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+        	 */
         	public void actionPerformed(ActionEvent e) {
         		recovery = !recovery;
         	}
@@ -336,6 +410,9 @@ public class SimulatorView extends JFrame
         sliderVelocidadeMenu.setValue(0);
         sliderVelocidadeMenu.setMinimum(-100);
         sliderVelocidadeMenu.addChangeListener(new ChangeListener() {
+            /* (non-Javadoc)
+             * @see javax.swing.event.ChangeListener#stateChanged(javax.swing.event.ChangeEvent)
+             */
             public void stateChanged(ChangeEvent e) {
             	  velocidade = sliderVelocidadeMenu.getValue();
               }
@@ -352,8 +429,11 @@ public class SimulatorView extends JFrame
         constructTubaraoMenu(menuBar);
 	}
 
+	/**
+	 * Constrói a aba de tubarão
+	 * @param menuBar A barra de menu
+	 */
 	private void constructTubaraoMenu(JMenuBar menuBar) {
-		// TODO Auto-generated method stub
 		JMenu tubaraoMenu = new JMenu("Tubar\u00E3o");
         tubaraoMenu.setHorizontalAlignment(SwingConstants.LEFT);
         menuBar.add(tubaraoMenu);
@@ -431,6 +511,9 @@ public class SimulatorView extends JFrame
         
         JButton buttonAtualizarTubarao = new JButton("Atualizar");
         buttonAtualizarTubarao.addActionListener(new ActionListener() {
+        	/* (non-Javadoc)
+        	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+        	 */
         	public void actionPerformed(ActionEvent e) {        		
 	    		tubaraoFlag = !tubaraoFlag;
 	    		tubaraoInfos[0]=sliderPesoInicialTubarao.getValue();
@@ -443,6 +526,9 @@ public class SimulatorView extends JFrame
         
         JButton buttonResetarTubarao = new JButton("Resetar");
         buttonResetarTubarao.addActionListener(new ActionListener() {
+        	/* (non-Javadoc)
+        	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+        	 */
         	public void actionPerformed(ActionEvent e) {
         		tubaraoFlag = !tubaraoFlag;
         		tubaraoInfos[0]=tubaraoInfosOriginal[0];
@@ -459,8 +545,11 @@ public class SimulatorView extends JFrame
 	}
 	
 
+	/**
+	 * Constrói o menu de atum
+	 * @param menuBar A barra de menu
+	 */
 	private void constructAtumMenu(JMenuBar menuBar) {
-		// TODO Auto-generated method stub
 		JMenu atumMenu = new JMenu("Atum");
         atumMenu.setHorizontalAlignment(SwingConstants.LEFT);
         menuBar.add(atumMenu);
@@ -534,6 +623,9 @@ public class SimulatorView extends JFrame
         
         JButton buttonAtualizarAtum = new JButton("Atualizar");
         buttonAtualizarAtum.addActionListener(new ActionListener() {
+        	/* (non-Javadoc)
+        	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+        	 */
         	public void actionPerformed(ActionEvent e) {        		
 	    		atumFlag = !atumFlag;
 	    		atumInfos[0]=sliderPesoInicialAtum.getValue();
@@ -546,6 +638,9 @@ public class SimulatorView extends JFrame
         
         JButton buttonResetarAtum = new JButton("Resetar");
         buttonResetarAtum.addActionListener(new ActionListener() {
+        	/* (non-Javadoc)
+        	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+        	 */
         	public void actionPerformed(ActionEvent e) {
         		atumFlag = !atumFlag;
         		atumInfos[0]=atumInfosOriginal[0];
@@ -561,8 +656,11 @@ public class SimulatorView extends JFrame
 	}
 	
 
+	/**
+	 * Constrói o menu de sardinhas
+	 * @param menuBar A barra de menu
+	 */ 
 	private void constructSardinhaMenu(JMenuBar menuBar) {
-		// TODO Auto-generated method stub
 		JMenu sardinhaMenu = new JMenu("Sardinha");
         sardinhaMenu.setHorizontalAlignment(SwingConstants.LEFT);
         menuBar.add(sardinhaMenu);
@@ -634,6 +732,9 @@ public class SimulatorView extends JFrame
         
         JButton botaoAtualizarBoxSardinha = new JButton("Atualizar");
         botaoAtualizarBoxSardinha.addActionListener(new ActionListener() {
+        	/* (non-Javadoc)
+        	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+        	 */
         	public void actionPerformed(ActionEvent arg0) {
         		sardinhaFlag = !sardinhaFlag;
         		sardinhaInfos[0]=pesoInicialSliderSardinha.getValue();
@@ -646,6 +747,9 @@ public class SimulatorView extends JFrame
         
         JButton botaoResetarBoxSardinha = new JButton("Resetar");
         botaoResetarBoxSardinha.addActionListener(new ActionListener() {
+        	/* (non-Javadoc)
+        	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+        	 */
         	public void actionPerformed(ActionEvent e) {
         		sardinhaFlag = !sardinhaFlag;
         		sardinhaInfos[0]=sardinhaInfosOriginal[0];
@@ -661,18 +765,23 @@ public class SimulatorView extends JFrame
 	}
 
 	
-	/**
-     * Define a color to be used for a given class of animal.
+    /**
+     * Define a cor usada por um animal
+     * @param animalClass A classe do animal
+     * @param color A cor do animal
      */
-    public void setColor(Class animalClass, Color color)
+    public void setColor(@SuppressWarnings("rawtypes") Class animalClass, Color color)
     {
         colors.put(animalClass, color);
     }
 
+  
     /**
-     * @return The color to be used for a given class of animal.
+     * Retorna a cor de uma classe de animal
+     * @param animalClass A classe do animal
+     * @return A cor dele
      */
-    private Color getColor(Class animalClass)
+    private Color getColor(@SuppressWarnings("rawtypes") Class animalClass)
     {
         Color col = colors.get(animalClass);
         if(col == null) {
@@ -684,10 +793,11 @@ public class SimulatorView extends JFrame
         }
     }
 
+
     /**
-     * Show the current status of the ocean.
-     * @param step Which iteration step it is.
-     * @param ocean The ocean whose status is to be displayed.
+     * Retorna o estado atual do oceano
+     * @param step O passo atual
+     * @param ocean O oceano que será mostrado
      */
     public void showStatus(int step, Ocean ocean)
     {
@@ -711,10 +821,8 @@ public class SimulatorView extends JFrame
                 	int g = Plancton_Full_COLOR.getGreen();
                 	int b = Plancton_Full_COLOR.getBlue();
                 	int planctonInfluence = (int) ocean.getPlanctonAt(row, col);
-                	//rgb(24, 67, 53) -> rgb(24, 51, 123)
-                	//85, 170, 74 ->  85, 150, 220
-                	//53+53=106+53=160
-                	
+
+                	//rgb(85, 170, 74) ->  rgb(85, 150, 220)  	
                     oceanView.drawMark(col, row, new Color(r, Math.max(0, g+planctonInfluence), Math.max(0, (int)(b-planctonInfluence*2*10))));
                 }
             }
@@ -725,9 +833,11 @@ public class SimulatorView extends JFrame
         oceanView.repaint();
     }
 
+
     /**
-     * Determine whether the simulation should continue to run.
-     * @return true If there is more than one species alive.
+     * Determina se a simulação deve continuar rodando
+     * @param ocean O oceano a ser verificado
+     * @return A determinação
      */
     public boolean isViable(Ocean ocean)
     {
@@ -735,14 +845,12 @@ public class SimulatorView extends JFrame
     }
     
     /**
-     * Provide a graphical view of a rectangular ocean. This is 
-     * a nested class (a class defined inside a class) which
-     * defines a custom component for the user interface. This
-     * component displays the ocean.
-     * This is rather advanced GUI stuff - you can ignore this 
-     * for your project if you like.
+     * Provê uma interface gráfica para a simulação
+     * @author luanpereira00
+     *
      */
-    private class OceanView extends JPanel
+    @SuppressWarnings("serial")
+	private class OceanView extends JPanel
     {
         private final int GRID_VIEW_SCALING_FACTOR = 6;
 
@@ -753,7 +861,9 @@ public class SimulatorView extends JFrame
         private Image oceanImage;
 
         /**
-         * Create a new OceanView component.
+         * Cria o vizualizador do oceano
+         * @param height A altura
+         * @param width A largura
          */
         public OceanView(int height, int width)
         {
@@ -762,8 +872,8 @@ public class SimulatorView extends JFrame
             size = new Dimension(0, 0);
         }
 
-        /**
-         * Tell the GUI manager how big we would like to be.
+        /* (non-Javadoc)
+         * @see javax.swing.JComponent#getPreferredSize()
          */
         @Override
         public Dimension getPreferredSize()
@@ -773,8 +883,7 @@ public class SimulatorView extends JFrame
         }
         
         /**
-         * Prepare for a new round of painting. Since the component
-         * may be resized, compute the scaling factor again.
+         * Prepara para uma nova rodada de pintura
          */
         public void preparePaint()
         {
@@ -794,8 +903,12 @@ public class SimulatorView extends JFrame
             }
         }
         
+
         /**
-         * Paint on grid location on this ocean in a given color.
+         * Pinta num determinado grid uma cor determinada
+         * @param x A posição de x
+         * @param y A posição de y
+         * @param color A cor
          */
         public void drawMark(int x, int y, Color color)
         {
@@ -803,9 +916,8 @@ public class SimulatorView extends JFrame
             g.fillRect(x * xScale, y * yScale, xScale, yScale);
         }
 
-        /**
-         * The ocean view component needs to be redisplayed. Copy the
-         * internal image to screen.
+        /* (non-Javadoc)
+         * @see javax.swing.JComponent#paintComponent(java.awt.Graphics)
          */
         public void paintComponent(Graphics g)
         {
@@ -821,13 +933,4 @@ public class SimulatorView extends JFrame
             }
         }
     }
-
-	private class SwingAction extends AbstractAction {
-		public SwingAction() {
-			putValue(NAME, "SwingAction");
-			putValue(SHORT_DESCRIPTION, "Some short description");
-		}
-		public void actionPerformed(ActionEvent e) {
-		}
-	}
 }
